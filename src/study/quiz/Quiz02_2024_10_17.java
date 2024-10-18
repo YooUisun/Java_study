@@ -1,5 +1,5 @@
 
-//2024-10-17 연산자 퀴즈
+//2024-10-17 연산자 중간 퀴즈
 
 package study.quiz;
 
@@ -53,7 +53,7 @@ public class Quiz02_2024_10_17 {
 //		6-1. 계산 결과가 아래와 같이 나오도록 코드를 작성하세요.
 		int o = 111;
 		int p = 13;
-		int result7 = o % p ;
+		int result7 = o % p ;			// %연산에 대해서 다시 한 번 공부해보기
 		System.out.println(result7);
 
 //		6-2. 계산 결과가 아래와 같이 나오도록 코드를 작성하세요.
