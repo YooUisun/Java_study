@@ -1,9 +1,11 @@
-// 2024-10-17 오후 퀴즈 
-	package study.quiz;
+//2024-10-17 연산자 중간 퀴즈
 
-			public class Quiz03_2024_10_17 {
+package study.quiz;
 
-			public static void main(String[] args) {
+public class Quiz03_2024_10_17 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 
 //	1. 아래 코드에서 예상되는 출력 결과를 작성하세요
 //	int x = 2;
