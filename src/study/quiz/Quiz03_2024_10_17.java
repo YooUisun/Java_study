@@ -63,7 +63,8 @@ public class Quiz03_2024_10_17 {
 //		8000원 초과 ~ 12000원 -> "눈물"
 //		12000원 초과 -> "물로배채우기"
 
-		int menuPrice = 30000; //점심 식사 메뉴 가격 (임의로 변경해가면서 테스트)
+		int menuPrice = 7000; //점심 식사 메뉴 가격 (임의로 변경해가면서 테스트)
 		String result9 = menuPrice <= 6000 ? "훌룡" :  menuPrice <= 8000 ? "선방" :  menuPrice <= 12000 ? "눈물" : "물로배채우기";
 		System.out.println(result9);
+}
 }

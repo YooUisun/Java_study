@@ -172,7 +172,7 @@ public class Practice02 {
 //
 //		//4번 아래 코드를 switch 문으로 변경
 		int score;
-		score = 85;
+		score = 85;  // 이 스코어를 변경하면 됨
 		if( score >= 90) {
 			System.out.println("학점 A");
 			} else if ( score >= 80) {
