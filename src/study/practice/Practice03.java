@@ -31,7 +31,9 @@ public class Practice03 {
 		
 		
 		System.out.println("============");
-
+			//for/while 반복
+			// 단순 횟수만 반복 vs 연산(실행문) 참여
+		
 		System.out.println("반복문 1개로 결과 만들기");
 
 			for (int i=1; i<=5; i++) { 
