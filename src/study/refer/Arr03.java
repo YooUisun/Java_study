@@ -26,6 +26,12 @@ public class Arr03 {
 		
 		String[][] arr3 = { {"A", "B","C"} , {"D","E","F"}};
 		//arr3[0][2];
+
+					//이런식이다.
+		// String 				String
+		// arr3[0][1] == arr3[1][2] 주소
+		// arr3[0][1]. equals(arr3[1][2] 주소
+		
 		
 	}
 

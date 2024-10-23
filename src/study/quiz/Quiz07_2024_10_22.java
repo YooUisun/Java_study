@@ -18,7 +18,7 @@ public class Quiz07_2024_10_22 {
 		
 		if (lastNumber == 1 || lastNumber ==3) {
 			System.out.println("Age : " + age + "살 남자" + "입니다.");
-		}
+			
 		} else if (lastNumber == 2 || lastNumber ==4) {
 			System.out.println("Age : " + age +"살 여자" + "입니다. ");
 		} else 
