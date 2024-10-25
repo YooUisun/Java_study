@@ -10,7 +10,7 @@ public class Arr02 {
 			//int[] << 1차원 배열
 			//int[][][] 3차원 배열
 			//int[][][][] 4차원 배열
-			int[][] nArr1 = new int[3][5];
+			int[][] nArr1 = new int[3][5]; //2차원 배열
 			
 			
 		/*   0 1  2 3 4     
