@@ -1,6 +1,6 @@
 //2024-10-31 1번 테스트 
 
-package Test;
+package study.Test;
 
 import java.util.Scanner;
 
