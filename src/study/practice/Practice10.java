@@ -1,5 +1,3 @@
-//2024-10-25 메뉴 선택하고 출력해보기
-
 package study.practice;
 
 import java.util.Scanner;
@@ -8,56 +6,58 @@ public class Practice10 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        Scanner scanner = new Scanner(System.in); 
-
-        String[] menu = {"아메리카노", "카페라떼", "바닐라라떼"};
-        int[] prices = {3500, 4100, 4300};
-        int[] num = new int[3];
-        
-       while (true) {
-        	System.out.println("========메뉴========");
-       	for (int i = 0; i < menu.length; i++) {
-   			System.out.printf("%d. %s %d원\n", i + 1, menu[i], prices[i]);
-
-
-            }
-       			System.out.println("=====================");
-       
-            System.out.print("메뉴선택:");
-            int choice = scanner.nextInt(); 
-            if (choice <1 || choice > menu.length) {
-            	System.out.println("잘못된 선택입니다. 다시 선택하세요");
-            	continue;
-            }
-            
-            
-            System.out.print("수량: ");
-            int quantity = scanner.nextInt();
-            if (quantity <=0) {
-            	System.out.println("수량은 1 이상이어야 합니다.");
-            	continue;
-            }
-            num[choice -1] += quantity;
-            
-            System.out.print("추가 주문하시겠습니까? (Y/N): ");
-            char add = scanner.next().charAt(0);
-            if(add != 'y' && add !='Y') {
-            	break;
-            }
-         }
-       
-       System.out.println("\n 주문 내역:");
-       int total =0;
-       for (int i= 0; i < menu.length; i++) {
-    	   if (num [i] > 0) {
-    		   int price = prices [i] * num[i];
-    		   System.out.printf("%s %d개: %d원\n" , menu[i], num[i], price);
-    		   total += price;
-    	   }
-       }
-       System.out.printf("총: %d원\n", total);
-       
-       
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.print("국어점수 : ");
+		int lang = scanner.nextInt();
+		
+		System.out.print("수학점수 : ");
+		int math = scanner.nextInt();
+		
+		System.out.print("영어점수 : ");
+		int eng = scanner.nextInt();
+		
+		int total = lang + math + eng; //총합
+		//double avg = (double)total / 3; //평균
+		double avg = total / 3.0; //평균
+		
+		if( lang>=40 && math>=40 && eng>=40 && avg>=60 ) {
+			//합격
+			System.out.println("국어 : " + lang);
+			System.out.println("수학 : " + math);
+			System.out.println("영어 : " + eng);
+			System.out.println("합계 : " + total);
+			System.out.println("평균 : " + avg);
+			System.out.println("축하합니다. 합격입니다!");
+		} else {
+			//불합격
+			System.out.println("불합격입니다.");
+		}
+		
+		if( lang<40 || math<40 || eng<40 || avg<60 ) {
+			//불합격
+			System.out.println("불합격입니다.");
+		} else {
+			//합격
+			System.out.println("국어 : " + lang);
+			System.out.println("수학 : " + math);
+			System.out.println("영어 : " + eng);
+			System.out.println("합계 : " + total);
+			System.out.println("평균 : " + avg);
+			System.out.println("축하합니다. 합격입니다!");
+		}
+		
 	}
 
 }
+
+
+
+
+
+
+
+
+
+

@@ -6,8 +6,7 @@ public class StudentMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		int n= 10;
+		int n = 10;
 		int[] arr = new int[3];
 		
 		Student stu1 = null;
@@ -18,16 +17,20 @@ public class StudentMain {
 		Scanner scanner = new Scanner(System.in);
 		
 		stu1.name = "이름일";
-		//두 개의 값은 다르다.
 		stu2.name = "이름이";
 		
 		System.out.println(stu1.name);
 		System.out.println(stu2.name);
-
 		
 		stu1.grade = 3;
 		stu2.grade = 5;
 		
-		}
+		String name;
+		name = "변경";
+		
+		stu1.phone = "12313";
+		stu1.studentNumber = "sodijfo";
+		
+	}
 
 }
