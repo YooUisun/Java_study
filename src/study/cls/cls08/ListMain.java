@@ -26,7 +26,8 @@ public class ListMain {
 		}
 		System.out.println();
 		
-		ArrayList<String> list = new ArrayList<String> ();
+		
+		ArrayList<String> list = new ArrayList<String>();
 		list.add("ㄱ");
 		list.add("ㄴ");
 		list.add("ㄷ");
@@ -41,9 +42,12 @@ public class ListMain {
 		list.remove(2);
 		
 		for(String item : list) {
-			System.out.print(item+ " ");
+			System.out.print(item + " ");
 		}
 		System.out.println();
 	}
+	
 
 }
+
+

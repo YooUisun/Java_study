@@ -11,21 +11,20 @@ public class PointMain {
 		p1.eng = 80;
 //		p1.com = 100;
 //		
-		p1.setCom(200);
+//		p1.com = 200;
 		
 		p1.setMath(50);
-		System.out.println(p1.getMath() );
-
-		p1.setMath(50);
-		System.out.println(p1.math);
-
+		System.out.println( p1.getMath() );
+		
+		p1.math = 50;
+		System.out.println( p1.math );
+		
 //		p1.com = 200;
 		p1.setCom(-80);
-		System.out.println(p1.getCom() );
+		System.out.println( p1.getCom() );
 		
-		int s1, s2 ,s3;
+		int s1, s2, s3;
 		int[] scores;
 		
 	}
-
 }

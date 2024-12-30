@@ -10,15 +10,19 @@ public class ClassListMain {
 		// TODO Auto-generated method stub
 		
 		Temp t = new Temp();
+		//t.print();
 		
 		Temp[] arr = new Temp[3];
 		arr[0] = new Temp();
 		arr[1] = new Temp();
 		arr[2] = t;
 		
-		//Integer 는 int 타입의 Wrapper Class 
-		//Double 는 double 타입의 Wrapper 클래스 이다.
-
+		//Integer 는 int 타입의 Wrapper Class
+		//Double 는 double 타입의 Wrapper 클래스
+		
+		ArrayList<Temp> list2 = null; //new ArrayList<Temp>(); 
+		//list2.add(new Temp());
+		
 		ArrayList<Temp> list = new ArrayList<Temp>();
 		list.add(t);
 		list.add(new Temp());
@@ -29,6 +33,7 @@ public class ClassListMain {
 		for(int i=0; i<list.size(); i++) {
 			list.get(i).print();
 		}
+		
 		for(Temp item : list) {
 			item.print();
 		}
@@ -38,17 +43,19 @@ public class ClassListMain {
 		for(Temp item : returnList) {
 			item.print();
 		}
-
 	}
 	
+	//				리턴타입			메소드명		매개변수
 	public static ArrayList<Temp> methodList(ArrayList<Temp> list){
 		System.out.println("method 안에서");
 		list.add(new Temp());
 		list.get(1).print();
 		
-		
-		
 		return list;
 	}
 
 }
+
+
+
+

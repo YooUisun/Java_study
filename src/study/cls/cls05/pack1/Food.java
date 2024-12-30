@@ -1,12 +1,12 @@
 package study.cls.cls05.pack1;
 
 public class Food {
-	
+
 	public int id;
 	public String name;
 	public String content;
 	public int price;
-	public String imgPahth;
+	public String imgPath;
 	
 	public int getId() {
 		return id;
@@ -32,11 +32,13 @@ public class Food {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public String getImgPahth() {
-		return imgPahth;
+	public String getImgPath() {
+		return imgPath;
 	}
-	public void setImgPahth(String imgPahth) {
-		this.imgPahth = imgPahth;
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
 	}
+	
+	
 	
 }
