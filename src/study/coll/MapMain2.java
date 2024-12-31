@@ -8,7 +8,7 @@ public class MapMain2 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Map<String, Score> map = new HashMap<String, Score> ();
+		Map<String, Score> map = new HashMap<String, Score>();
 		
 		Score s1 = new Score();
 		s1.setMath(100);
@@ -18,11 +18,9 @@ public class MapMain2 {
 		map.put("김하나", s1);
 		map.put("정둘", new Score(80, 60, 40));
 		
-		
 		System.out.println(map.get("정둘"));
 		System.out.println( map.get("정둘").getMath() );
 		System.out.println( map.get("김하나").getEng() );
-
 	}
 }
 
@@ -65,7 +63,6 @@ class Score {
 		return "Score [math=" + math + ", eng=" + eng + ", lang=" + lang + "]";
 	}
 	
-	
-	
+		
 	
 }
