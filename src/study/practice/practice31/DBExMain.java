@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import study.db.sample.Dept;
+import study.db.sample.v1.Dept;
 
 public class DBExMain {
 
