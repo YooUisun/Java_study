@@ -1,6 +1,10 @@
 package study.api;
 
-import java.io.IOException;
+
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,78 +12,73 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class ApiExplorer {
+
+	public static void main(String[] args)  {
+
+		List<ArplInfo> arplList = null;
+		try {
+			arplList = ArplApiService.forecastDustArplInfoList("2024-12-21");
+
+			for(ArplInfo info : arplList) {
+				System.out.println( info.toString() );
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//ArplInfo 객체 -> DB 저장
+		
+		//ArplDAO
+		ArplDAO arplDAO = new ArplDAO();
+		
+		int count = 0;
+		for(ArplInfo ai : arplList) {
+			count += arplDAO.saveArplInfo(ai);
+		}
+		System.out.println(count + "개 저장성공");
+		
+		//API -> 데이터확보 -> 저장
+		//누적해서 데이터를 계속 저장/활용
+			//1)기존 데이터 delete -> 새로 insert
+			//2)MERGE 처리
+		
+//		int result = arplDAO.saveArplInfo(arplList.get(0));
+//		if(result > 0) {
+//			System.out.println("저장 잘 됨");
+//		}
+	}
 	
-    public static void main(String[] args) {
-    	
-    	try {
-//        	String jsonText = ArplApiService.forecastDust("2024-12-21");
-    		
-    		String jsonText = "{\"response\":{\"body\":{\"totalCount\":20,\"items\":[{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 일부 중부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도는 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 밤에 강원영서는 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 보통,제주 : 보통,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 좋음,충남 : 보통,충북 : 보통,세종 : 보통,대전 : 보통,영동 : 좋음,영서 : 보통,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122221.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122303.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122309.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 대체로 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'∼'보통'으로 예상됩니다.\",\"informData\":\"2024-12-23\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122309.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122303.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122221.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 일부 중부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도는 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 밤에 강원영서는 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 나쁨,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 보통,세종 : 보통,대전 : 보통,영동 : 보통,영서 : 보통,경기남부 : 나쁨,경기북부 : 나쁨,인천 : 보통\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122221.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122303.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM2P5.1hsp.2024122309.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 대체로 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'∼'보통'으로 예상됩니다.\",\"informData\":\"2024-12-23\",\"informGrade\":\"서울 : 보통,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 보통,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 23시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122309.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122303.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/23/09km/AQF.20241221.NIER_09_01.PM10.1hsp.2024122221.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 대부분 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 밤에 대전·영남권은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 보통,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 보통,세종 : 보통,대전 : 보통,영동 : 좋음,영서 : 보통,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122221.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122303.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122309.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 대체로 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'∼'보통'으로 예상됩니다.\",\"informData\":\"2024-12-23\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122309.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122303.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122221.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 대부분 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 밤에 대전·영남권은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 나쁨,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 나쁨,세종 : 나쁨,대전 : 보통,영동 : 보통,영서 : 나쁨,경기남부 : 나쁨,경기북부 : 나쁨,인천 : 보통\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122121.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122203.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122209.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122209.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122203.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122121.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122221.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122303.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122309.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 대체로 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'∼'보통'으로 예상됩니다.\",\"informData\":\"2024-12-23\",\"informGrade\":\"서울 : 보통,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 보통,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 17시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122309.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122303.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/17/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122221.png\"},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122103.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122109.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122115.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 대부분 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 오후에 인천·대전·충남·광주·대구·경북·제주권은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 보통,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 보통,세종 : 보통,대전 : 보통,영동 : 보통,영서 : 보통,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 11시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122115.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122109.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122103.png\"},{\"imageUrl4\":null,\"informCode\":\"PM10\",\"imageUrl5\":null,\"imageUrl6\":null,\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 11시 발표\",\"imageUrl3\":null,\"imageUrl2\":null,\"imageUrl1\":null},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122103.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122109.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122115.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 대부분 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 오후에 인천·대전·충남·광주·대구·경북·제주권은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 나쁨,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 나쁨,세종 : 나쁨,대전 : 보통,영동 : 보통,영서 : 나쁨,경기남부 : 나쁨,경기북부 : 나쁨,인천 : 보통\",\"dataTime\":\"2024-12-21 11시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122115.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122109.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/11/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122103.png\"},{\"imageUrl4\":null,\"informCode\":\"PM25\",\"imageUrl5\":null,\"imageUrl6\":null,\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 11시 발표\",\"imageUrl3\":null,\"imageUrl2\":null,\"imageUrl1\":null},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122100.png\",\"informCode\":\"PM10\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122106.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122112.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 일부 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 오전에 인천·대전·충남, 오후에 대구·경북은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 보통,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 보통,세종 : 보통,대전 : 보통,영동 : 보통,영서 : 보통,경기남부 : 보통,경기북부 : 보통,인천 : 보통\",\"dataTime\":\"2024-12-21 05시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122112.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122106.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122100.png\"},{\"imageUrl4\":null,\"informCode\":\"PM10\",\"imageUrl5\":null,\"imageUrl6\":null,\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 05시 발표\",\"imageUrl3\":null,\"imageUrl2\":null,\"imageUrl1\":null},{\"imageUrl4\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122100.png\",\"informCode\":\"PM25\",\"imageUrl5\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122106.png\",\"imageUrl6\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM2P5.1hsp.2024122112.png\",\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 대부분 중부 지역과 일부 남부 지역은 전일 미세먼지가 잔류하고, 국외 미세먼지가 유입되어 농도가 높을 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 서울·경기도·강원영서·세종·충북은 '나쁨', 그 밖의 권역은 '보통'으로 예상됩니다. 다만, 오전에 인천·대전·충남, 오후에 대구·경북은 '나쁨' 수준일 것으로 예상됩니다.\",\"informData\":\"2024-12-21\",\"informGrade\":\"서울 : 나쁨,제주 : 보통,전남 : 보통,전북 : 보통,광주 : 보통,경남 : 보통,경북 : 보통,울산 : 보통,대구 : 보통,부산 : 보통,충남 : 보통,충북 : 나쁨,세종 : 나쁨,대전 : 보통,영동 : 보통,영서 : 나쁨,경기남부 : 나쁨,경기북부 : 나쁨,인천 : 보통\",\"dataTime\":\"2024-12-21 05시 발표\",\"imageUrl3\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122112.png\",\"imageUrl2\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122106.png\",\"imageUrl1\":\"https://www.airkorea.or.kr/file/proxyImage?fileName=2024/12/21/05/09km/AQF.20241220.NIER_09_01.PM10.1hsp.2024122100.png\"},{\"imageUrl4\":null,\"informCode\":\"PM25\",\"imageUrl5\":null,\"imageUrl6\":null,\"actionKnack\":null,\"informCause\":\"○ [미세먼지] 원활한 대기 확산으로 대기질이 청정할 것으로 예상됩니다.\",\"informOverall\":\"○ [미세먼지] 전 권역이 '좋음'으로 예상됩니다.\",\"informData\":\"2024-12-22\",\"informGrade\":\"서울 : 좋음,제주 : 좋음,전남 : 좋음,전북 : 좋음,광주 : 좋음,경남 : 좋음,경북 : 좋음,울산 : 좋음,대구 : 좋음,부산 : 좋음,충남 : 좋음,충북 : 좋음,세종 : 좋음,대전 : 좋음,영동 : 좋음,영서 : 좋음,경기남부 : 좋음,경기북부 : 좋음,인천 : 좋음\",\"dataTime\":\"2024-12-21 05시 발표\",\"imageUrl3\":null,\"imageUrl2\":null,\"imageUrl1\":null}],\"pageNo\":1,\"numOfRows\":100},\"header\":{\"resultMsg\":\"NORMAL_CODE\",\"resultCode\":\"00\"}}}\r\n"
-    				+ "";
-        	
-        	System.out.println("***********요청 결과 텍스트*******");
-        	System.out.println(jsonText);	//json 포멧 ApI 요청 결과 -> 응답 데이터 확보
-        	
-        	//Json 포멧 텍스트 -> 원하는형태로 변환 -> 활용 (DB 저장)
-        	
-        	JSONParser jsonParser = new JSONParser();
-        	JSONObject jsonObj = (JSONObject)jsonParser.parse(jsonText); // 최초 json 포맷 텍스트 -> json 객체
-        	JSONObject response = (JSONObject)jsonObj.get("response");
-        	
-        	JSONObject header = (JSONObject)response.get("header");
-        	System.out.println(header.get("resultMsg"));
-        	System.out.println(header.get("resultCode"));
-        	
-        	JSONObject body = (JSONObject)response.get("body");
-        	System.out.println(body.get("totalCount"));
-        	
-        	JSONArray items =(JSONArray)body.get("items");
-        	
-        	List<ArplInfo> arplList = new ArrayList<ArplInfo> ();
-        	
-        
-        	for(int i=0; i<items.size(); i++) {
-        		
-        		JSONObject item = (JSONObject)items.get(i); // items 배열안에 해당인덱스위치에 -> 객체가 들어있다.
-        		System.out.println(">>>index:" + i );
-        		System.out.println(item.get("informData"));
-        		System.out.println(item.get("informOverall"));
-        		
-        		ArplInfo ai = new ArplInfo();
-        		ai.setInformCode( convertValueTosString(item.get("informCode")));
-        		ai.setActionKnack( convertValueTosString(item.get("actionKnack")));
-        		ai.setInformCause( convertValueTosString(item.get("informCause")));
-        		ai.setInformData( convertValueTosString(item.get("informData")));
-        		ai.setInformGrade( convertValueTosString(item.get("informGrade")));
-        		ai.setImageUrl1( convertValueTosString(item.get("imageUrl1")));
+	
+	
+	
+	
+	//메소드 요청 응답 예시
+	public String aprlDustInfoToday(int code) {	//100 200 300
+		if(code == 100)
+			return "오늘은 먼지가 깨끗합니다";
+		else if (code == 200 )
+			return "오늘은 먼지가 안깨끗";
+		else if (code == 300 )
+			return "ABDDOE";  //ABDDOE 먼지가 너무 안좋아서 집에있어라
+		else
+			return "잘못된 요청입니다";
+	}
 
-        		arplList.add(ai);
-        	}
-        	
-        	//json 포멧 이었던 걸 -> 자바 ArplInfo 객체로 변환 완료
-        	for(ArplInfo info : arplList) {
-        		System.out.println( info.toString() );
-        	}
-        	
-        	//ArplInfo 객체 -> DB 저장
-        	
-    	} catch (Exception e) {
-    		e.printStackTrace();
-
-    	}
-        
-    }
-    public static String  convertValueTosString(Object obj) {
-    	return obj == null ? "" : obj.toString();
-    	
-    	return result;
-    }
-    
-    public static List<ArplInfo> forecastDustArplInfoList(String date) throws IOException {
-    	
-    }
-    	
-    } 
 }
+
+
+
+
+
+
+
+
+
+
 

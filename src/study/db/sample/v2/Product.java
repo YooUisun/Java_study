@@ -5,13 +5,14 @@ public class Product {
 	String pName;
 	int pPrice;
 	
+	
 	public Product() {}
 	public Product(int pCode, String pName, int pPrice) {
-		this.pCode =pCode;
+		this.pCode = pCode;
 		this.pName = pName;
 		this.pPrice = pPrice;
-		
 	}
+	
 	public int getpCode() {
 		return pCode;
 	}
@@ -34,4 +35,5 @@ public class Product {
 	public String toString() {
 		return "Product [pCode=" + pCode + ", pName=" + pName + ", pPrice=" + pPrice + "]";
 	}
+	
 }
