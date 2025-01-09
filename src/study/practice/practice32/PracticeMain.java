@@ -31,12 +31,20 @@ public class PracticeMain {
 			System.out.println(s);
 		}
 		
+
 		//저장을 하려는 StudentDTO 객체
 		//insert 호출
 		
-		StudentDTO saveStudent = new StudentDTO(1,"이름","아이디",5, "9901011234123","2000-05-31","010-1234-1234",180,80,305,405,9999);
+		StudentDTO saveStudent = new StudentDTO(2, "이름", "아이디2", 5, "9901011234123", "2000-05-31", "010-1234-1234", 180, 80, 305, 405, 9999);
 		int result = studentDAO.saveStudent(saveStudent);
-		System.out.println(result); 	// >0
+		System.out.println(result);  // > 0 
 	}
 
 }
+
+
+
+
+
+
+

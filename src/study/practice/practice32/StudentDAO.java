@@ -1,13 +1,12 @@
 package study.practice.practice32;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import study.db.sample.v2.ConvertDateUtil;
 
 public class StudentDAO {
 
@@ -114,44 +113,67 @@ public class StudentDAO {
 		
 	}
 	
+	
 	public int saveStudent(StudentDTO student) {
 		
 		conn = DBConnectionManager.connectDB();
-		
-		int result = 0; 
-		
-		String sqlQuery = "INSERT INTO student Values (?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		int result = 0;
+
+		//쿼리 준비
+		String sqlQuery = " insert into student values (?, ?, ?, ?, ?,  TO_DATE(?, 'yyyy-MM-dd') , ?, ?, ?, ?, ?, ?) ";
 		try {
 			//쿼리 실행 후 데이터 후속 처리
-			
+
 			psmt = conn.prepareStatement(sqlQuery);
 			
+			psmt.setInt(1, student.getStudno());
+			psmt.setString(2, student.getName());
+			psmt.setString(3, student.getId());
 			
-            psmt.setInt(1, student.getStudno());
-            psmt.setString(2, student.getName());
-            psmt.setString(3, student.getId());
-            psmt.setInt(4, student.getGrade());
-            psmt.setString(5, student.getJumin());
-            psmt.setString(6, student.getBirthday()); // birthday 고정
-//            psmt.setTimestamp(6,null);
-//            ConvertDateUtil.convertLocalDateTimeToString(student,getBirthday());
-            psmt.setString(7, student.getTel());
-            psmt.setInt(8, student.getHeight());
-            psmt.setInt(9, student.getWeight());
-            psmt.setInt(10, student.getDeptno1());
-            psmt.setInt(11, student.getDeptno2());
-            psmt.setInt(12, student.getProfno());		
-            
-            
-            
-            result = psmt.executeUpdate();
-            
+			psmt.setInt(4, student.getGrade());
+			psmt.setString(5, student.getJumin());
+			psmt.setString(6, student.getBirthday());
+			
+			//psmt.setDate(6, Date.valueOf(student.getBirthday()));
+			//								String , LocalDate
+			
+			//psmt.setTimestamp(6, ConvertDateUtil.convertLocalDateTimeToTimestamp(student.getBirthday()));
+			// 								LocalDateTime
+			
+			
+			psmt.setString(7, student.getTel());
+			psmt.setInt(8, student.getHeight());
+			psmt.setInt(9, student.getWeight());
+			psmt.setInt(10, student.getDeptno1());
+			psmt.setInt(11, student.getDeptno2());
+			psmt.setInt(12, student.getProfno());
+			
+			result = psmt.executeUpdate();
+			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DBConnectionManager.disconnectDB(conn, psmt, null);
+			DBConnectionManager.disconnectDB(conn, psmt, rs);	
 		}
-				return result;
+
+		return result;
+		
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -71,8 +71,8 @@ public class StudentDTO {
 	public String getJumin() {
 		return jumin;
 	}
-	public void setJumin(String jumin) {  
-		this.jumin = jumin; 
+	public void setJumin(String jumin) {
+		this.jumin = jumin;
 	}
 	public String getBirthday() {
 		return birthday;
